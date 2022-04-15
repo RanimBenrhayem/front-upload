@@ -1,0 +1,124 @@
+/* table{
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+thead{
+  background-color: rgb(132, 170, 219);
+  height: 1.5cm;
+ 
+  
+}
+tr{
+  border: 1px solid rgb(236, 235, 235);
+  padding: 8px;
+  height: 1.2cm;
+  text-align: center;
+}
+th{
+ 
+  padding: 8px;
+  
+  
+  text-align: center;
+ 
+  color: rgb(10, 22, 131);
+} */
+/* tr:hover {background-color: #ddd;} */
+table{
+  width: 90%;
+  text-align: center;
+  margin:auto
+
+
+}
+table thead {
+  font-size: 14px;
+  line-height: 22px;
+  font-family: "Roboto", serif;
+  font-style: normal;
+  font-weight: 500 ;
+  color: #09136b;
+
+}table td , .table th {
+  border-bottom: 2px solid #d6d3d3;
+}
+
+table td {
+  height: 49px;
+  background: #ffffff;
+  font-family: 'Poppins', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #000000;
+ 
+
+}
+
+
+.buttonpoubelle{
+  border: none;
+  background-color: transparent;
+color: rgb(126, 13, 13);
+font-size: 20px;}
+
+.eyebutton{
+  border: none;
+  background-color: transparent;
+color: rgb(13, 21, 126);
+font-size: 20px; 
+}
+
+
+
+
+
+
+
+
+
+
+/* .navv {
+  display: flex;
+  height: 4em;
+  align-items: center;
+  margin-top: 0%;
+  padding: 0px;
+  background-color: #57575a;
+}
+.logoheader {
+  width: 39mm;
+  height: 25mm;
+  margin-left: 13mm;
+}
+.titreheader {
+  margin-left: 4cm;
+}
+
+.dashboard {
+  transform: scale(1.75);
+  align-items: "center";
+  color: black;
+}
+.warning {
+  transform: scale(1.75);
+  align-items: "center";
+  color: black;
+}
+.recom {
+  transform: scale(1.75);
+  align-items: "center";
+  color: black;
+}
+.bod {
+  background-color: #a5a9be;
+  margin-top: 1.6cm;
+}
+.logoutbutton {
+  transform: scale(1.75);
+  align-items: "center";
+  color: rgb(7, 6, 6);
+}
+ */
