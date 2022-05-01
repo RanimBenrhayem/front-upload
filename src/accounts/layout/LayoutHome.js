@@ -90,8 +90,8 @@ export default function LayoutHome() {
 
   return (
     <div>
-      {["left"].map((anchor) => (
-        <React.Fragment key={anchor}>
+      {["left"].map((anchor,index) => (
+        <React.Fragment key={index}>
           <AppBar className={clsx(classes.appBar)} position="fixed">
             <Toolbar>
               <IconButton

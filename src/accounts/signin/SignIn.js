@@ -10,18 +10,19 @@ import axios from "axios"; //pour l'envoie des requetes
 import Google from "../googlesignin/Google";
 import { useNavigate } from "react-router-dom";
 
+//import SignUp from "../signup/SignUp";
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  //const [redirect, setRedirect] = useState(true);
   async function handleSubmitSignin(e) {
     e.preventDefault();
     try {
       const response = await axios({
         //requete
         method: "POST",
-        url: "http://localhost:5000/user/signin",
+        url: "http://localhost:8080/user/signin",
         data: {
           //donnees de la requete
           email: email,
@@ -29,11 +30,20 @@ function SignIn() {
         },
       });
       navigate("/Dashboard");
-      Swal.fire(
-        "You Have Successfully Logged in !",
-        ` ${response.data} `,
-        "success"
-      );
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: response.data,
+      });
+      setPassword("");
+      setEmail("");
     } catch (error) {
       console.log(error);
       Swal.fire({

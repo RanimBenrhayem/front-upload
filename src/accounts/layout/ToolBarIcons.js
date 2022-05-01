@@ -85,10 +85,10 @@ export default function Print() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
+                {settings.map((setting,index) => (
                   //<Stack spacing={2} direction="column">
                   <div>
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem key={index} onClick={handleCloseUserMenu}>
                       <MenuItem color="inherit">
                         <Typography>
                           <PictureAsPdfIcon size={30} /> PDF

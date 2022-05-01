@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import React from "react";
-
 function Google() {
   const navigate = useNavigate();
   async function responseSuccessGoogle(response) {

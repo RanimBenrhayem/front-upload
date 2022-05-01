@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-
 //import "../../styles/accounts.css";
 
 import Swal from "sweetalert2";
@@ -22,10 +21,10 @@ function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios({
+      const response = await axios({
         //requete
         method: "POST",
-        url: "http://localhost:5000/user/signup",
+        url: "http://localhost:8080/user/signup",
         data: {
           //donnees de la requete
           firstName: firstName,
@@ -33,19 +32,25 @@ function SignUp() {
           phoneNumber: phoneNumber,
           email: email,
           password: password,
-          //role: role,
         },
+      });
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-left",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: response.data,
       });
       setFistName("");
       setLastName("");
       setPassword("");
       setPhoneNumber("");
       setEmail("");
-      //setRole("");
-      Swal.fire({
-        title: "Your account has been successfully created !",
-        icon: "success",
-      });
     } catch (error) {
       console.log(error);
       Swal.fire({
@@ -129,7 +134,6 @@ function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
-
             <Grid item sm={5}>
               <Button
                 type="submit"

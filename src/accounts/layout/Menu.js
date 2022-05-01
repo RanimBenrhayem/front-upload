@@ -45,7 +45,8 @@ export default function Menu2() {
               </ListItemIcon>
               <Typography> Dashboard</Typography>
             </ListItem>
-            <ListItem button sx={{ pl: 6 }} style={{ marginLeft: 13 }}>
+            <ListItem button sx={{ pl: 6 }} style={{ marginLeft: 13 }}  component={Link}
+              to={"/UploadedFilesList"}>
               <ListItemIcon>
                 <UploadFileIcon />
               </ListItemIcon>

@@ -9,7 +9,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import axios from "axios";
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 import DeleteIcon from "@mui/icons-material/Delete";
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 
 import {
   TableRow,
@@ -21,11 +24,14 @@ import {
   Tooltip,
   Button,
   ButtonGroup,
+  DialogTitle,
+  Dialog,
+  DialogContent,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteUser from "./DeleteUser";
-import EditIcon from "@mui/icons-material/Edit";
 
+import EditIcon from "@mui/icons-material/Edit";
+import Swal from "sweetalert2";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
@@ -34,8 +40,14 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import LayoutHome from "../layout/LayoutHome";
 import RegisterDialogForm from "../clientsmanagement/AddUser";
+import UpdateUser from "./UpdateUser";
 
 function TablePaginationActions(props) {
+
+
+
+
+
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -104,13 +116,19 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-//const rows = [createData("Cupcake", 305, 3), createData("Donut", 452, 25.0)];
-
 export default function UsersHome() {
   const [usersCollection, setUsersCollection] = React.useState([]);
+  
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [id,setId]= React.useState("")
+
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/user/userslist")
+      .get("http://localhost:8080/user/userslist")
       .then((res) => {
         setUsersCollection(res.data);
       })
@@ -119,14 +137,57 @@ export default function UsersHome() {
       });
   });
   const handleDeleteUser = (_id) => {
-    axios
-      .post(`http://localhost:5000/user/deleteuser/${_id}`)
-      .then((res) => {
-        setUsersCollection(res.data);
+    Swal.fire({
+      title: "Do You Realy Want To Delete This User?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.post('http://localhost:8080/user/deleteuser/626d147b86f8fa0b21c20747').then((res) => {
+            console.log(res.data);
+            setUsersCollection([res.data]);
+            console.log("cbon");
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-right",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+
+        Toast.fire({
+          icon: "success",
+          title: "User Deleted Successfully !",
+        });
+      }
+    });
+  };
+  const handleUpdateUser =async () => {
+    try {
+      const response = await axios ({
+        method : 'put',
+        url : `http://localhost:8080/user/updateuser/${id}`,
+        data : {
+          firstName ,
+          lastName,
+          email,
+          password,
+          phoneNumber
+        }
+
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+      
+    }
   };
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -145,6 +206,39 @@ export default function UsersHome() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const handleClickOpen =async (userId) => {
+    try {
+      const response = await axios({
+     
+        method:"get",
+        url : `http://localhost:8080/user/userById/${userId}`
+      })
+      const {_id,firstName,lastName,email,phoneNumber,password}=response.data
+      setId(_id)
+      setFirstName(firstName)
+      setLastName(lastName)
+      setPhoneNumber(phoneNumber)
+      setEmail(email)
+      setPassword(password)
+      setOpen(true);
+    } catch (error) {
+      console.log(error)
+    }
+   
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handlePreviewClick = ()=>{
+    setShow(true)
+  }
+  const handleShow = ()=>{
+    setShow(false);
+  }
+  const [open, setOpen] = React.useState(false);
+  const [show,setShow] = React.useState(false);
 
   return (
     <React.Fragment>
@@ -197,7 +291,7 @@ export default function UsersHome() {
                     )
                   : setUsersCollection
                 ).map((data, i) => (
-                  <TableRow key={i}>
+                  <TableRow key={data._id}>
                     <TableCell component="th" scope="row">
                       {data._id}
                     </TableCell>
@@ -220,24 +314,184 @@ export default function UsersHome() {
                         aria-label="item action group"
                         color="inherit"
                       >
-                        <Tooltip title="Edit">
-                          <Button
-                            color="info"
-                            //onClick={handleEditClick}
-                            startIcon={<EditIcon />}
-                          />
-                        </Tooltip>
-                        <Tooltip title="View More Details">
+                        <Button
+                          color="info"
+                          //onClick={handleEditClick}
+                          onClick={()=>handleClickOpen(data._id)}
+                          startIcon={<EditIcon />}
+                        />
+                        <Dialog open={open} onClose={handleClose} fullWidth>
+                          <DialogTitle>Edit User Profile</DialogTitle>
+                          <DialogContent>
+                            <Box
+                              component="form"
+                              sx={{ mt: 2 }}
+                              onSubmit={handleUpdateUser}
+                            >
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <TextField
+                                    name="firstName"
+                                    required
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    id="phonenumber"
+                                    label="Phone Number"
+                                    name="phonenumber"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                  />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                  />
+                                </Grid>
+
+                                <Grid item sm={5}>
+                                  <Button
+                                    type="submit"
+                                    variant="contained"
+                                    fullWidth
+                                    sx={{ mt: 2, mb: 2 }}
+                                  >
+                                    Save
+                                  </Button>
+                                </Grid>
+                                <Grid item sm={5}>
+                                  <Button
+                                    type="reset"
+                                    variant="outlined"
+                                    fullWidth
+                                    sx={{ mt: 2, mb: 2 }}
+                                    onClick={handleClose}
+                                  >
+                                    Cancel
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          </DialogContent>
+                        </Dialog>
+                  
                           <Button
                             color="success"
-                            //onClick={handlePreviewClick}
-                            startIcon={<VisibilityIcon />}
+                            onClick={handlePreviewClick}
+                            startIcon={<EmailOutlinedIcon />
+                                                        }
                           />
-                        </Tooltip>
+                          <Dialog open={show} onClose={handleShow} fullWidth>
+                          <DialogTitle>Send message</DialogTitle>
+                          <DialogContent>
+                          <DialogContentText>
+            Please write your message here ...!
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="message"
+            label="message"
+            type="message"
+            fullWidth
+            variant="standard"
+          />
+<Grid container spacing={2}>
+<Grid item sm={5}>
+                                  <Button
+                                    type="submit"
+                                    variant="contained"
+                                    
+                                    sx={{ mt: 5, mb: 1 }}
+                                  >
+                                    Save
+                                  </Button>
+                                </Grid>
+                                <Grid item sm={5}>
+                                  <Button
+                                    type="reset"
+                                    variant="outlined"
+                                    
+                                    onClick={handleShow}
+                                  >
+                                    Cancel
+                                  </Button>
+                                </Grid>
+                            
+                                </Grid>
+
+                          </DialogContent>
+                        </Dialog>
+                      
+{/* 
+<Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent  >
+          <DialogContentText>
+            To send an email to this user , please write your message...
+          </DialogContentText>
+          <TextField
+            
+            id="message"
+            label="message"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Send</Button>
+        </DialogActions>
+      </Dialog> */}
+
+
+
+
+
+
                         <Tooltip title="Delete">
                           <Button
                             color="error"
-                            onClick={handleDeleteUser}
+                            onClick={(e) => handleDeleteUser(data._id)}
                             startIcon={<DeleteIcon />}
                           />
                         </Tooltip>
@@ -283,117 +537,3 @@ export default function UsersHome() {
     </React.Fragment>
   );
 }
-
-/*import React from "react";
-import {
-  Container,
-  Paper,
-  TextField,
-  Button,
-  Grid,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableBody,
-  TableCell,
-  Table,
-  ButtonGroup,
-  Tooltip,
-} from "@mui/material";
-
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Typography } from "@material-ui/core";
-import LayoutHome from "../layout/LayoutHome";
-import RegisterDialogForm from "../clientsmanagement/AddUser";
-*/
-
-/*<div>
-      <>
-        <LayoutHome />
-        <Container
-          width="ld"
-          sx={{
-            marginTop: 5,
-            marginBottom: 5,
-            marginLeft: 15,
-          }}
-        >
-          <Paper sx={{ padding: "2em 2em", boxShadow: 3 }}>
-            <Grid justifyContent="space-between" sx={{ m: 1 }} container>
-              <Grid item sx={{ mt: 2, mb: 2 }}>
-                <Typography variant="h6" fontWeight="bold">
-                  Users List
-                </Typography>
-              </Grid>
-              <TextField
-                //  inputRef={inputElem}
-                id="outlined-basic"
-                label="Search User"
-                variant="outlined"
-                sx={{ mt: 1, mb: 2 }}
-                style={{ width: 350, marginRight: -60 }}
-              />
-              <div style={{ marginTop: 15, marginRight: 140 }}>
-                <RegisterDialogForm />
-              </div>
-            </Grid>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 600 }} aria-label="customized table">
-                <TableHead style={{ backgroundColor: "#E5E4E2" }}>
-                  <TableRow>
-                    <TableCell>Id</TableCell>
-                    <TableCell>First Name</TableCell>
-                    <TableCell>Last Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Phone Number</TableCell>
-                    <TableCell>Password</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableCell>exp</TableCell>
-                  <TableCell>exp</TableCell>
-                  <TableCell>exp</TableCell>
-                  <TableCell>exp</TableCell>
-                  <TableCell>exp</TableCell>
-                  <TableCell>exp</TableCell>
-
-                  <TableCell>
-                    <ButtonGroup
-                      variant="outlined"
-                      orientation={"horizontal"}
-                      aria-label="item action group"
-                      color="inherit"
-                    >
-                      <Tooltip title="Edit">
-                        <Button
-                          color="info"
-                          //onClick={handleEditClick}
-                          startIcon={<EditIcon />}
-                        />
-                      </Tooltip>
-                      <Tooltip title="View More Details">
-                        <Button
-                          color="success"
-                          //onClick={handlePreviewClick}
-                          startIcon={<VisibilityIcon />}
-                        />
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <Button
-                          color="error"
-                          //onClick={handleDeleteClick}
-                          startIcon={<DeleteIcon />}
-                        />
-                      </Tooltip>
-                    </ButtonGroup>
-                  </TableCell>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Container>
-      </>
-    </div>*/

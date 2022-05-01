@@ -28,10 +28,10 @@ export default function FormDialog() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios({
+      const response = await axios({
         //requete
         method: "POST",
-        url: "http://localhost:5000/user/signup",
+        url: "http://localhost:8080/user/signup",
         data: {
           //donnees de la requete
           firstName: firstName,
@@ -39,18 +39,39 @@ export default function FormDialog() {
           phoneNumber: phoneNumber,
           email: email,
           password: password,
-          //role: role,
         },
+      });
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: response.data,
       });
       setFistName("");
       setLastName("");
       setPassword("");
       setPhoneNumber("");
       setEmail("");
-      handleClose();
-      //setRole("");
     } catch (error) {
       console.log(error);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Oops...",
+        text: ` ${error.response.data} `,
+      });
     }
   }
 

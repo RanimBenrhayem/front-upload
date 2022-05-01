@@ -21,7 +21,18 @@ export default function Logout() {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire("You Have Been Successfully Logged Out");
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-left",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+
+        Toast.fire({
+          icon: "success",
+          title:'You have Successfully logged out',
+        });
         navigate("/");
       }
     });

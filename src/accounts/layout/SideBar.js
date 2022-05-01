@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -15,9 +16,13 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import DoubleArrowSharpIcon from "@material-ui/icons/DoubleArrowSharp";
 import Divider from "@material-ui/core/Divider";
 import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Menu2 from "./Menu";
 
+import Box from "@mui/material/Box";
+
+import Menu2 from "./Menu";
+import RecomHome from "../recommendation/RecomHome";
+
+//import FileUploader from "../uploadfiles/UploadFiles";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -140,7 +145,6 @@ export default function SideBar() {
           </div>
         </Toolbar>
       </AppBar>
-
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
