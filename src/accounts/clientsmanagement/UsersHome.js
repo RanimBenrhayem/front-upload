@@ -10,9 +10,9 @@ import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import axios from "axios";
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
 import DeleteIcon from "@mui/icons-material/Delete";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
 
 import {
   TableRow,
@@ -28,7 +28,6 @@ import {
   Dialog,
   DialogContent,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
@@ -40,7 +39,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import LayoutHome from "../layout/LayoutHome";
 import RegisterDialogForm from "../clientsmanagement/AddUser";
-import UpdateUser from "./UpdateUser";
+import AddAdmin from "../clientsmanagement/AddAdmin"
 
 function TablePaginationActions(props) {
 
@@ -125,11 +124,13 @@ export default function UsersHome() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [id,setId]= React.useState("")
+  const [emailContent , setEmailContent ] = React.useState('')
 
   React.useEffect(() => {
     axios
       .get("http://localhost:8080/user/userslist")
       .then((res) => {
+        console.log(res.data)
         setUsersCollection(res.data);
       })
       .catch(function (error) {
@@ -147,7 +148,8 @@ export default function UsersHome() {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post('http://localhost:8080/user/deleteuser/626d147b86f8fa0b21c20747').then((res) => {
+        
+        axios.delete('http://localhost:8080/user/deleteuser/6244580ee417031a85fea2f3').then((res) => {
             console.log(res.data);
             setUsersCollection([res.data]);
             console.log("cbon");
@@ -183,12 +185,61 @@ export default function UsersHome() {
         }
 
       })
-      console.log(response)
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: 'user Uploaded successfully',
+      });
+      console.log('c bon')
     } catch (error) {
       console.log(error)
       
     }
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: ` ${error.response.data} `,
+    });
   };
+  
+const sendEmail= async ()=>{
+  console.log(emailContent)
+
+ try {
+  const response = await axios ({
+    method : 'post',
+    url : `http://localhost:8080/user/sendEmail`,
+    data : {
+    email : email,
+    message: emailContent
+    }
+  })
+  setEmailContent("")
+  setShow(false)
+  console.log(response)
+ } catch (error) {
+   console.log(error)
+ }
+    
+      
+
+
+
+
+
+
+}
+
+
+
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -231,7 +282,9 @@ export default function UsersHome() {
     setOpen(false);
   };
 
-  const handlePreviewClick = ()=>{
+  const handlePreviewClick = (mail)=>{
+    setEmail(mail)
+
     setShow(true)
   }
   const handleShow = ()=>{
@@ -255,19 +308,21 @@ export default function UsersHome() {
           <Grid justifyContent="space-between" sx={{ m: 1 }} container>
             <Grid item sx={{ mt: 2, mb: 2 }}>
               <Typography variant="h6" fontWeight="bold">
-                Users List
+                Users  List
               </Typography>
             </Grid>
             <TextField
               //  inputRef={inputElem}
               id="outlined-basic"
-              label="Search User"
+              label="Search User "
               variant="outlined"
               sx={{ mt: 1, mb: 2 }}
               style={{ width: 350, marginRight: -60 }}
             />
             <div style={{ marginTop: 15, marginRight: 140 }}>
-              <RegisterDialogForm />
+            <AddAdmin/>   <RegisterDialogForm />
+            
+             
             </div>
           </Grid>
           <TableContainer component={Paper}>
@@ -279,7 +334,7 @@ export default function UsersHome() {
                   <TableCell align="right">Last Name</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Phone Number</TableCell>
-
+                  <TableCell>Role</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -290,8 +345,10 @@ export default function UsersHome() {
                       page * rowsPerPage + rowsPerPage
                     )
                   : setUsersCollection
-                ).map((data, i) => (
-                  <TableRow key={data._id}>
+                ).map((data, i) => {
+                  const bg = data.roleId.name ==='admin'? 'blue':'white'
+                  return (
+                    <TableRow key={data._id} style={{backgroundColor:bg}} >
                     <TableCell component="th" scope="row">
                       {data._id}
                     </TableCell>
@@ -307,6 +364,12 @@ export default function UsersHome() {
                     <TableCell component="th" scope="row">
                       {data.phoneNumber}
                     </TableCell>
+                   
+    <TableCell component="th" scope="row">
+    {data.roleId.name}
+  </TableCell>
+                 
+                
                     <TableCell>
                       <ButtonGroup
                         variant="outlined"
@@ -415,7 +478,7 @@ export default function UsersHome() {
                   
                           <Button
                             color="success"
-                            onClick={handlePreviewClick}
+                            onClick={()=>handlePreviewClick(data.email)}
                             startIcon={<EmailOutlinedIcon />
                                                         }
                           />
@@ -433,12 +496,15 @@ export default function UsersHome() {
             type="message"
             fullWidth
             variant="standard"
+            value={emailContent}
+            onChange={(e)=> setEmailContent(e.target.value)}
           />
 <Grid container spacing={2}>
 <Grid item sm={5}>
                                   <Button
                                     type="submit"
                                     variant="contained"
+                                    onClick={sendEmail}
                                     
                                     sx={{ mt: 5, mb: 1 }}
                                   >
@@ -498,7 +564,10 @@ export default function UsersHome() {
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>
-                ))}
+                  )
+                }
+                
+                )}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell colSpan={6} />
@@ -534,6 +603,7 @@ export default function UsersHome() {
           </TableContainer>
         </Paper>
       </Container>
+     
     </React.Fragment>
   );
 }

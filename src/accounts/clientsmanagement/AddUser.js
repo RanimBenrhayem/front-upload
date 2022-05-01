@@ -81,6 +81,7 @@ export default function FormDialog() {
         variant="outlined"
         onClick={handleClickOpen}
         startIcon={<AddCircleIcon />}
+      
       >
         Add new user
       </Button>
