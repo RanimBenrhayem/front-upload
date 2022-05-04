@@ -47,6 +47,20 @@ function FileUploader() {
     setArray(array);
   };
 
+  function handleShow (){
+    if (file[0]) {
+      fileReader.onload = function (event) {
+        const text = event.target.result;
+        csvFileToArray(text);
+        console.log(file[0]);
+
+      };
+      fileReader.readAsText(file[0]);
+      setShow(true)
+    }
+
+  }
+
   //la fonction asynchrone handleUpload (en relation avec le back)
   async function handleUpload() {
     try {
@@ -88,7 +102,7 @@ function FileUploader() {
       <AiFillEyeInvisible /> <div className="buttontexticon">Hide</div>{" "}
     </button>
   ) : (
-    <button title="Show" className="eyebutton" onClick={() => setShow(true)}>
+    <button title="Show" className="eyebutton" onClick={handleShow}>
       <AiFillEye /> <div className="buttontexticon">Show</div>
     </button>
   );

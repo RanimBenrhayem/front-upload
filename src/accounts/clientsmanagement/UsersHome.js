@@ -125,6 +125,7 @@ export default function UsersHome() {
   const [password, setPassword] = React.useState("");
   const [id,setId]= React.useState("")
   const [emailContent , setEmailContent ] = React.useState('')
+  const[listUpdated,setLisUpdated] = React.useState(false)
 
   React.useEffect(() => {
     axios
@@ -136,7 +137,7 @@ export default function UsersHome() {
       .catch(function (error) {
         console.log(error);
       });
-  });
+  },[listUpdated]);
   const handleDeleteUser = (_id) => {
     Swal.fire({
       title: "Do You Realy Want To Delete This User?",
@@ -149,9 +150,10 @@ export default function UsersHome() {
     }).then((result) => {
       if (result.isConfirmed) {
         
-        axios.delete('http://localhost:8080/user/deleteuser/6271061fffeb0a9a1cdd5b41').then((res) => {
+        axios.delete(`http://localhost:8080/user/deleteuser/${_id}`).then((res) => {
             console.log(res.data);
-            setUsersCollection([res.data]);
+           // setUsersCollection([res.data]);
+           setLisUpdated(!listUpdated)
             console.log("cbon");
           })
           .catch(function (error) {
@@ -175,7 +177,7 @@ export default function UsersHome() {
     try {
       const response = await axios ({
         method : 'put',
-        url : `http://localhost:8080/user/updateuser/62710b99b4a11503f7f3793d`,
+        url : `http://localhost:8080/user/updateuser/62710673ffeb0a9a1cdd5b46`,
         data : {
           firstName ,
           lastName,
@@ -185,6 +187,7 @@ export default function UsersHome() {
         }
 
       })
+      setLisUpdated(!listUpdated)
       const Toast = Swal.mixin({
         toast: true,
         position: "bottom-right",
@@ -198,6 +201,7 @@ export default function UsersHome() {
         title: 'user Updated successfully',
       });
       console.log('c bon')
+   
     } catch (error) {
       console.log(error)
       
@@ -557,7 +561,7 @@ const sendEmail= async ()=>{
                         <Tooltip title="Delete">
                           <Button
                             color="error"
-                            onClick={(e) => handleDeleteUser(data._id)}
+                            onClick={() => handleDeleteUser(data._id)}
                             startIcon={<DeleteIcon />}
                           />
                         </Tooltip>

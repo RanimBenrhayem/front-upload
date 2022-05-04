@@ -38,6 +38,7 @@ export const UserFiles = () => {
   const [joinFileName, setJoinFileName] = useState("");
   const [joinedFiles, setJoinedFiles] = useState("");
   const [isDeletedJoinFiles, setIsDeletedJoinFiles] = useState(false);
+  const [joinedTab,setJoinedTab] = useState(true)
 
   const lastItemRef = useRef(null);
 
@@ -103,14 +104,15 @@ export const UserFiles = () => {
     }
   };
 
-  const handleShow2 = async (fileName) => {
-    if (fileName.length > 0) {
+  const handleShow2 = async (id) => {
+    if (id.length > 0) {
       setShowFile("");
       setArray([]);
       const response = await axios({
         method: "get",
-        url: `http://localhost:8080/uploads/${fileName}`,
+        url: `http://localhost:8080/uploads/files/joined/getbyid/${id}`,
       });
+      console.log(response)
       setShowFile(response.data);
 
       csvFileToArray(response.data);
@@ -213,26 +215,45 @@ export const UserFiles = () => {
     );
     if (response.success === true) {
       console.log(response.data.joinedResult);
-      const headerKeys2 = Object.keys(
-        Object.assign({}, ...response.data.joinedResult)
-      );
-      console.log(headerKeys2);
-      const transform = ConvertToCSV(response.data.joinedResult);
-      console.log(transform);
-      setShowFile(response.data.joinedResult);
-      setJoinFileName(response.data.originalFileName);
+      if( response.data.joinedResult.length>0){
+        const headerKeys2 = Object.keys(
+          Object.assign({}, ...response.data.joinedResult)
+        );
+        console.log(headerKeys2);
+        const transform = ConvertToCSV(response.data.joinedResult);
+        console.log(transform);
+        setShowFile(response.data.joinedResult);
+        setJoinFileName(response.data.originalFileName);
+  
+        const headersString =
+          headerKeys2.reduce(
+            (previousHeader, currentHeader) =>
+              previousHeader + "," + currentHeader,
+            ""
+          ) + "\n";
+        console.log(headersString);
+        csvFileToArray(headersString.substring(1) + transform);
+        setJoinedTab(false)
+      }else{
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
 
-      const headersString =
-        headerKeys2.reduce(
-          (previousHeader, currentHeader) =>
-            previousHeader + "," + currentHeader,
-          ""
-        ) + "\n";
-      console.log(headersString);
-      csvFileToArray(headersString.substring(1) + transform);
+      Toast.fire({
+        icon: "error",
+        title: "can't join file .. please choose other attributs",
+      });
+      }
     }
+  
+   
+      
+      
   }
-
   async function handleFile2Options(e) {
     console.log(e.target.value);
     setFile2ToJoin(e.target.value);
@@ -243,11 +264,13 @@ export const UserFiles = () => {
         setHeaders2(getHeadersFromCsv(response.data));
       }
     }
-  }
+    }
 
   const headerKeys = Object.keys(Object.assign({}, ...array));
   console.log(array);
-
+const showJoinedTab = joinedTab ? <button  className="buttonShow" onClick={JoinedFiles}>show</button> : <button  className="buttonShow" onClick={()=>{
+  setJoinedTab(true);setShowFile("");setJoinFileName("")
+}}>Hide</button>
   return (
     <>
       <div className="userfilesall">
@@ -312,7 +335,7 @@ export const UserFiles = () => {
 
                     <JoinedFilePreview
                       id={element._id}
-                      handleShow={handleShow}
+                      handleShow={handleShow2}
                       isDeleted={isDeletedJoinFiles}
                       setIsDeleted={setIsDeletedJoinFiles}
                     />
@@ -431,9 +454,7 @@ export const UserFiles = () => {
                   })}
                 </select>
                 <div>
-                  <button className="buttonShow" onClick={JoinedFiles}>
-                    show
-                  </button>
+                 {showJoinedTab}
 
                   <CSVLink data={showFile} filename={joinFileName}>
                     <button className="download">

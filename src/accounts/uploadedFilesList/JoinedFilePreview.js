@@ -44,7 +44,7 @@ function JoinedFilePreview({ id, handleShow, isDeleted, setIsDeleted }) {
       <button
         className="showeyes"
         onClick={() => {
-          handleShow(fileInfo.filename);
+          handleShow(id);
           setShowFile(true);
         }}
       >

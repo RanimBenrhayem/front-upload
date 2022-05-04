@@ -8,6 +8,7 @@ import WarningHome from "./accounts/warning/WarninhHome";
 import RecomHome from "./accounts/recommendation/RecomHome";
 import UsersHome from "./accounts/clientsmanagement/UsersHome";
 import UserFiles from "./accounts/uploadedFilesList/UserFiles";
+import CommentsHome from "./accounts/comments/CommentsHome";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/Recommendation" element={<RecomHome />}></Route>
           <Route exact path="/Users" element={<UsersHome />}></Route>
           <Route exact path="/UploadedFilesList" element={<UserFiles/>}></Route>
+          <Route exact path="/Comments" element={<CommentsHome />}></Route>
         </Routes>
 
 
