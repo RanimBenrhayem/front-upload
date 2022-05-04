@@ -51,7 +51,7 @@ const handleDelete = ()=>{
     confirmButtonText: 'Delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
-     deleteSignleFiles(id,"aaa").then((response) =>{
+     deleteSignleFiles(id,"6271101075cc6139b3b8df04").then((response) =>{
        if(response.success===true) {
 
        

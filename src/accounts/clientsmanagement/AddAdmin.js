@@ -51,7 +51,7 @@ export default function FormDialog() {
 
       Toast.fire({
         icon: "success",
-        title: response.data,
+        title:"Admin added sucessfully",
       });
       setFistName("");
       setLastName("");

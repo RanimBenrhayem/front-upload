@@ -83,7 +83,7 @@ export default function FormDialog() {
         startIcon={<AddCircleIcon />}
       
       >
-        Add new user
+      Add new client
       </Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Add User</DialogTitle>

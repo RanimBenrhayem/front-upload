@@ -6,7 +6,7 @@ export const getUserSimpleFiles= async () =>{
     try {
         const response =   await axios({
             method: "get",
-            url :"/uploads/files/getall/aaa",
+            url :"/uploads/files/getall/62710b99b4a11503f7f3793d",
         })
         return ({success : true,
             data : response.data,
@@ -28,7 +28,7 @@ export const getUserSimpleFiles= async () =>{
 export const uploadSingleFiles=async (formData)=>{
     try {
         const response = await axios({
-            url:'/uploads/aaa',
+            url:'/uploads/62710b99b4a11503f7f3793d',
             method:'POST',
             data : formData
     
@@ -80,7 +80,7 @@ export const joinProcess = async (fileId1,fileId2,attribut1,attribut2)=>{
   try {
     const response = await axios ({
         method:"delete",
-        url:`/uploads/files/delete/${id}/${userId}/`,
+        url:`/uploads/files/delete/6271101075cc6139b3b8df04/6271101075cc6139b3b8df04/`,
       
           
     
@@ -140,7 +140,7 @@ export const joinProcess = async (fileId1,fileId2,attribut1,attribut2)=>{
 
 try {
     const response = await  axios({
-        url:'/uploads/join/add/aaa',
+        url:'/uploads/join/add/6271101075cc6139b3b8df04',
           method:'POST',
           data : {formData,attribut1,attribut2,fileName1:file1,fileName2:file2}
       })
@@ -183,7 +183,7 @@ export const deleteJoinedFiles = async (id,userId)=>{
     try {
       const response = await axios ({
           method:"delete",
-          url:`/uploads/join/file/delete/${id}/${userId}/`,
+          url:`/uploads/join/file/delete/6271236d819ad018753ec26f/6271101075cc6139b3b8df04/`,
         
             
       
@@ -203,7 +203,7 @@ export const deleteJoinedFiles = async (id,userId)=>{
         try {
             const response =   await axios({
                 method: "get",
-                url :"uploads/files/joined/getall/aaa",
+                url :"uploads/files/joined/getall/6271101075cc6139b3b8df04",
             })
             return ({success : true,
                 data : response.data,

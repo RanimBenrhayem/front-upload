@@ -46,14 +46,20 @@ function SignIn() {
       setEmail("");
     } catch (error) {
       console.log(error);
-      Swal.fire({
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
         icon: "error",
-        title: "Oops...",
-        text: ` ${error.response.data} `,
+        title: `${error.response.data}`,
       });
     }
-    setPassword("");
-    setEmail("");
+  
   }
 
   return (

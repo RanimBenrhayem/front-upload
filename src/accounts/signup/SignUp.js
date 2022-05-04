@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 //import "../../styles/accounts.css";
 
 import Swal from "sweetalert2";
@@ -16,6 +17,7 @@ function SignUp() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   //const [role, setRole] = useState("user");
 
   async function handleSubmit(e) {
@@ -36,7 +38,7 @@ function SignUp() {
       });
       const Toast = Swal.mixin({
         toast: true,
-        position: "bottom-left",
+        position: "bottom-right",
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true,
@@ -46,19 +48,30 @@ function SignUp() {
         icon: "success",
         title: response.data,
       });
+    
       setFistName("");
       setLastName("");
       setPassword("");
       setPhoneNumber("");
       setEmail("");
+      navigate("/Dashboard");
+     
     } catch (error) {
       console.log(error);
-      Swal.fire({
+       const Toast = Swal.mixin({
+        toast: true,
+        position: "bottom-right",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      Toast.fire({
         icon: "error",
-        title: "Oops...",
-        text: ` ${error.response.data} `,
+        title: `${error.response.data}`,
       });
     }
+  
   }
 
   return (

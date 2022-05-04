@@ -149,7 +149,7 @@ export default function UsersHome() {
     }).then((result) => {
       if (result.isConfirmed) {
         
-        axios.delete('http://localhost:8080/user/deleteuser/6244580ee417031a85fea2f3').then((res) => {
+        axios.delete('http://localhost:8080/user/deleteuser/6271061fffeb0a9a1cdd5b41').then((res) => {
             console.log(res.data);
             setUsersCollection([res.data]);
             console.log("cbon");
@@ -175,7 +175,7 @@ export default function UsersHome() {
     try {
       const response = await axios ({
         method : 'put',
-        url : `http://localhost:8080/user/updateuser/${id}`,
+        url : `http://localhost:8080/user/updateuser/62710b99b4a11503f7f3793d`,
         data : {
           firstName ,
           lastName,
@@ -195,7 +195,7 @@ export default function UsersHome() {
 
       Toast.fire({
         icon: "success",
-        title: 'user Uploaded successfully',
+        title: 'user Updated successfully',
       });
       console.log('c bon')
     } catch (error) {
@@ -346,7 +346,7 @@ const sendEmail= async ()=>{
                     )
                   : setUsersCollection
                 ).map((data, i) => {
-                  const bg = data.roleId.name ==='admin'? 'blue':'white'
+                  const bg = data.roleId.name ==='admin'? '#DAE4F6':'white'
                   return (
                     <TableRow key={data._id} style={{backgroundColor:bg}} >
                     <TableCell component="th" scope="row">
