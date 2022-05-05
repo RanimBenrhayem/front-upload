@@ -27,6 +27,7 @@ import {
   DialogTitle,
   Dialog,
   DialogContent,
+  
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -126,6 +127,7 @@ export default function UsersHome() {
   const [id,setId]= React.useState("")
   const [emailContent , setEmailContent ] = React.useState('')
   const[listUpdated,setLisUpdated] = React.useState(false)
+  
 
   React.useEffect(() => {
     axios
@@ -173,21 +175,23 @@ export default function UsersHome() {
       }
     });
   };
-  const handleUpdateUser =async () => {
+  const handleUpdateUser =async (e) => {
+    e.preventDefault();
     try {
       const response = await axios ({
         method : 'put',
-        url : `http://localhost:8080/user/updateuser/62710673ffeb0a9a1cdd5b46`,
+        url : `http://localhost:8080/user/updateuser/62710752ffeb0a9a1cdd5b50`,
         data : {
           firstName ,
           lastName,
           email,
-          password,
           phoneNumber
         }
 
       })
-      setLisUpdated(!listUpdated)
+      console.log('c bon')
+
+       setLisUpdated(!listUpdated)
       const Toast = Swal.mixin({
         toast: true,
         position: "bottom-right",
@@ -200,18 +204,53 @@ export default function UsersHome() {
         icon: "success",
         title: 'user Updated successfully',
       });
-      console.log('c bon')
    
     } catch (error) {
       console.log(error)
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: ` ${error.response.data} `,
+      }).then(function(){
+        setOpen(true)
+      });
       
+    } finally {
+      setOpen(false)
     }
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: ` ${error.response.data} `,
-    });
+ 
   };
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  //     set search query to empty string
+  const [searchInput, setSearchInput] = React.useState("");
+  //A new state for the filtered data
+  const [filteredResults, setFilteredResults] = React.useState([]);
+  const searchItems = (searchValue) => {
+    setSearchInput(searchValue);
+    //console.log(searchValue);
+    if (searchInput !== "") {
+      const filteredData = usersCollection.filter((data, i) => {
+        return Object.values(data, i)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      //console.log(filteredData);
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(usersCollection);
+    }
+  };
+
+
+
+
+
+
+
+
+
   
 const sendEmail= async ()=>{
   console.log(emailContent)
@@ -244,8 +283,7 @@ const sendEmail= async ()=>{
 
 
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+ 
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -322,6 +360,7 @@ const sendEmail= async ()=>{
               variant="outlined"
               sx={{ mt: 1, mb: 2 }}
               style={{ width: 350, marginRight: -60 }}
+              onChange = {(e)=>searchItems(e.target.value)}
             />
             <div style={{ marginTop: 15, marginRight: 140 }}>
             <AddAdmin/>   <RegisterDialogForm />
@@ -343,7 +382,155 @@ const sendEmail= async ()=>{
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(rowsPerPage > 0
+              {searchInput.length > 1
+                  ? filteredResults.map((data, i) => {
+                      return (
+                        <TableRow key={data._id}>
+                          <TableCell component="th" scope="row">
+                            {data._id}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {data.firstName}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {data.lastName}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {data.email}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {data.phoneNumber}
+                          </TableCell>
+                          <TableCell>
+                            <ButtonGroup
+                              variant="outlined"
+                              orientation={"horizontal"}
+                              aria-label="item action group"
+                              color="inherit"
+                            >
+                              <Button
+                                color="info"
+                                //onClick={handleClickOpen}
+                                onClick={() => handleClickOpen(data._id)}
+                                startIcon={<EditIcon />}
+                              />
+                              <Dialog
+                                open={open}
+                                onClose={handleClose}
+                                fullWidth
+                              >
+                                <DialogTitle>Edit User Profile</DialogTitle>
+                                <DialogContent>
+                                  <Box
+                                    component="form"
+                                    sx={{ mt: 2 }}
+                                    onSubmit={handleUpdateUser}
+                                  >
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={12}>
+                                        <TextField
+                                          name="firstName"
+                                          required
+                                          fullWidth
+                                          id="firstName"
+                                          label="First Name"
+                                          value={firstName}
+                                          onChange={(e) =>
+                                            setFirstName(e.target.value)
+                                          }
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          id="lastName"
+                                          label="Last Name"
+                                          name="lastName"
+                                          value={lastName}
+                                          onChange={(e) =>
+                                            setLastName(e.target.value)
+                                          }
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          id="email"
+                                          label="Email Address"
+                                          name="email"
+                                          value={email}
+                                          onChange={(e) =>
+                                            setEmail(e.target.value)
+                                          }
+                                        />
+                                      </Grid>
+                                      <Grid item xs={12}>
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          id="phonenumber"
+                                          label="Phone Number"
+                                          name="phonenumber"
+                                          value={phoneNumber}
+                                          onChange={(e) =>
+                                            setPhoneNumber(e.target.value)
+                                          }
+                                        />
+                                      </Grid>
+                                     
+
+                                      <Grid item sm={5}>
+                                        <Button
+                                          type="submit"
+                                          variant="contained"
+                                          fullWidth
+                                          sx={{ mt: 2, mb: 2 }}
+                                        >
+                                          Save
+                                        </Button>
+                                      </Grid>
+                                      <Grid item sm={5}>
+                                        <Button
+                                          type="reset"
+                                          variant="outlined"
+                                          fullWidth
+                                          sx={{ mt: 2, mb: 2 }}
+                                          onClick={handleClose}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Box>
+                                </DialogContent>
+                              </Dialog>
+                              <Tooltip title="View More Details">
+                                <Button
+                                  color="success"
+                                  //onClick={handlePreviewClick}
+                                  startIcon={<EmailOutlinedIcon />}
+                                />
+                              </Tooltip>
+                              <Tooltip title="Delete">
+                                <Button
+                                  color="error"
+                                  onClick={(e) =>
+                                    handleDeleteUser(
+                                      data._id
+                                    ).setUsersCollection(data, i)
+                                  }
+                                  startIcon={<DeleteIcon />}
+                                />
+                              </Tooltip>
+                            </ButtonGroup>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  :
+                (rowsPerPage > 0
                   ? usersCollection.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
@@ -441,19 +628,7 @@ const sendEmail= async ()=>{
                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                   />
                                 </Grid>
-                                <Grid item xs={12}>
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                  />
-                                </Grid>
-
+                                
                                 <Grid item sm={5}>
                                   <Button
                                     type="submit"
