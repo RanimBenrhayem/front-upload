@@ -54,7 +54,7 @@ function SignUp() {
       setPassword("");
       setPhoneNumber("");
       setEmail("");
-      navigate("/Dashboard");
+      navigate("/");
      
     } catch (error) {
       console.log(error);

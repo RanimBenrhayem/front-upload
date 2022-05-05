@@ -29,6 +29,7 @@ function SignIn() {
           password: password,
         },
       });
+      axios.defaults.headers.common["Authorization"] = `Bearer ${response.data}` ;
       navigate("/Dashboard");
       const Toast = Swal.mixin({
         toast: true,
@@ -42,6 +43,7 @@ function SignIn() {
         icon: "success",
         title: response.data,
       });
+      console.log(response.data)
       setPassword("");
       setEmail("");
     } catch (error) {

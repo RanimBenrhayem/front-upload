@@ -62,7 +62,7 @@ function JoinedFilePreview({ id, handleShow, isDeleted, setIsDeleted }) {
       confirmButtonText: "Delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteJoinedFiles(id, "6271101075cc6139b3b8df04").then((response) => {
+        deleteJoinedFiles(id,"").then((response) => {
           if (response.success === true) {
             const Toast = Swal.mixin({
               toast: true,

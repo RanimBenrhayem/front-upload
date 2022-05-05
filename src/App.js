@@ -9,6 +9,7 @@ import RecomHome from "./accounts/recommendation/RecomHome";
 import UsersHome from "./accounts/clientsmanagement/UsersHome";
 import UserFiles from "./accounts/uploadedFilesList/UserFiles";
 import CommentsHome from "./accounts/comments/CommentsHome";
+import SignIn from "./accounts/signin/SignIn"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/Users" element={<UsersHome />}></Route>
           <Route exact path="/UploadedFilesList" element={<UserFiles/>}></Route>
           <Route exact path="/Comments" element={<CommentsHome />}></Route>
+          <Route exact path="/SignIn" element={<SignIn />}></Route>
         </Routes>
 
 

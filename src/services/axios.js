@@ -27,8 +27,9 @@ export const getUserSimpleFiles= async () =>{
 
 export const uploadSingleFiles=async (formData)=>{
     try {
+        console.log(axios.defaults.headers)
         const response = await axios({
-            url:'/uploads/62710b99b4a11503f7f3793d',
+            url:'/uploads',
             method:'POST',
             data : formData
     
@@ -80,7 +81,7 @@ export const joinProcess = async (fileId1,fileId2,attribut1,attribut2)=>{
   try {
     const response = await axios ({
         method:"delete",
-        url:`/uploads/files/delete/6271101075cc6139b3b8df04/6271101075cc6139b3b8df04/`,
+        url:`/uploads/files/delete/${id}/${userId}`,
       
           
     
@@ -183,7 +184,7 @@ export const deleteJoinedFiles = async (id,userId)=>{
     try {
       const response = await axios ({
           method:"delete",
-          url:`/uploads/join/file/delete/6271236d819ad018753ec26f/6271101075cc6139b3b8df04/`,
+          url:`/uploads/join/file/delete/${id}/${userId}`,
         
             
       

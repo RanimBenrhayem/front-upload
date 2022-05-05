@@ -137,24 +137,24 @@ export const UserFiles = () => {
     swall();
     setShow(!show);
   }
-  const handleJoinedShow = async (fileName) => {
-    if (fileName.length > 0) {
-      setShowFile("");
-      setArray([]);
-      const response = await axios({
-        method: "get",
-        url: `http://localhost:8080/uploads/${fileName}`,
-      });
-      setShowFile(response.data);
+  // const handleJoinedShow = async (fileName) => {
+  //   if (fileName.length > 0) {
+  //     setShowFile("");
+  //     setArray([]);
+  //     const response = await axios({
+  //       method: "get",
+  //       url: `http://localhost:8080/uploads/${fileName}`,
+  //     });
+  //     setShowFile(response.data);
 
-      csvFileToArray(response.data);
-      fileReader.readAsText(response.data);
-      // csvFileToArray(response.data.csvHeader)
-    } else {
-      setShowFile("");
-      setArray([]);
-    }
-  };
+  //     csvFileToArray(response.data);
+  //     fileReader.readAsText(response.data);
+  //     // csvFileToArray(response.data.csvHeader)
+  //   } else {
+  //     setShowFile("");
+  //     setArray([]);
+  //   }
+  // };
 
   const csvFileToArray = (string) => {
     const csvHeader = string.slice(0, string.indexOf("\n")).split(",");

@@ -159,7 +159,7 @@ const CommentsHome = () => {
       await axios({
         //requete
         method: "POST",
-        url: "http://localhost:8080/comments/addcomment/62710752ffeb0a9a1cdd5b50",
+        url: "http://localhost:8080/comments/addcomment",
         data: {
           //donnees de la requete
           topic: topic,
@@ -208,21 +208,33 @@ const CommentsHome = () => {
            // setCommentCollection([res.data]);
             //console.log("c bon deleted");
             setIsUpdated(!isUpdated)
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "bottom-right",
+              showConfirmButton: false,
+              timer: 1100,
+            });
+    
+            Toast.fire({
+              icon: "success",
+              title: "Comment Deleted Successfully !",
+            });
           })
           .catch(function (error) {
             console.log(error);
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "bottom-right",
+              showConfirmButton: false,
+              timer: 1100,
+            });
+    
+            Toast.fire({
+              icon: "error",
+              title: error.response.data,
+            });
           });
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "bottom-right",
-          showConfirmButton: false,
-          timer: 1100,
-        });
-
-        Toast.fire({
-          icon: "success",
-          title: "Comment Deleted Successfully !",
-        });
+        
       }
     });
   };
