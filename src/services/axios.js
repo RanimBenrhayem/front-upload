@@ -200,11 +200,11 @@ export const deleteJoinedFiles = async (id,userId)=>{
         
     }
      }
-     export const getUserJoinedFiles= async () =>{
+     export const getUserJoinedFiles= async (userId) =>{
         try {
             const response =   await axios({
                 method: "get",
-                url :"uploads/files/joined/getall/6271101075cc6139b3b8df04",
+                url :`uploads/files/joined/getall/${userId}`,
             })
             return ({success : true,
                 data : response.data,

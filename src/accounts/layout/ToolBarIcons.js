@@ -31,6 +31,7 @@ export default function Print() {
   };
   return (
     <div>
+     
       <ReactToPrint content={() => ref.current}>
         <PrintContextConsumer>
           {({ handlePrint }) => (

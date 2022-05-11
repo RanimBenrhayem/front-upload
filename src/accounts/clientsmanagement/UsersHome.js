@@ -180,7 +180,7 @@ export default function UsersHome() {
     try {
       const response = await axios ({
         method : 'put',
-        url : `http://localhost:8080/user/updateuser/62710752ffeb0a9a1cdd5b50`,
+        url : `http://localhost:8080/user/updateuser/${id}`,
         data : {
           firstName ,
           lastName,

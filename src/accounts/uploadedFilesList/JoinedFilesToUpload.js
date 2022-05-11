@@ -20,7 +20,7 @@ import {
   getUserJoinedFiles,
 } from "../../services/axios";
 
-export const UserFiles = () => {
+export const JoinedFilesToUpload = () => {
   //const componentRef = useRef()
   //useState
   const [files, setFiles] = useState([]);
@@ -273,65 +273,24 @@ const showJoinedTab = joinedTab ? <button  className="buttonShow" onClick={Joine
 }}>Hide</button>
   return (
     <>
-      <div className="userfilesall">
-        <div ref={lastItemRef}></div>
-        {files.length > 0 && (
-          <>
-            <h2 className="gradient">Your Files</h2>
-            <br />
-            <table className="tableofuploadedfiles">
-              <tr>
-                <th> Name</th>
-                <th>Show </th>
-                <th>Delete</th>
-              </tr>
-              {files.map((element, index) => {
-                //   <thead>
-                //   <tr key={"header"}>
-                //     {headerKeys2.map((key) => (
-                //       <th>{key}</th>
-                //     ))}
-                //   </tr>
-                // </thead>
-                return (
-                  <>
-                    <SingleFilePreview
-                      id={element._id}
-                      handleShow={handleShow}
-                      isDeleted={isDeleted}
-                      setIsDeleted={setIsDeleted}
-                    />
+      
 
-                    {/* <button onClick={()=>handleShow(element.fileName)}>see file</button>   <button>*/}
-                  </>
-                );
-              })}
-            </table>
-            <br />
-            <br />
-            <hr />
-            <br />
-            <br />
-          </>
-        )}
-
-        {joinedFiles.length > 0 && (
+         {joinedFiles.length > 0 && (
           <>
-            <h2 className="gradient">Your joined Files</h2>
+            
             <br />
+            <h2 className="gradient_Join">Your joined Files</h2>
             <table className="tableofuploadedfiles">
               <tr>
                 <th> Name</th>
                 <th>Show </th>
                 <th>Delete </th>
+                <th>Download as CSV File</th>
               </tr>
               {joinedFiles.map((element, index) => {
                 return (
                   <>
-                    {/* <ReactToPrint
-          trigger={() => <a href="#">Print this out!</a>}
-          content={() => componentRef.current}
-        /> */}
+                 
 
                     <JoinedFilePreview
                       id={element._id}
@@ -340,15 +299,15 @@ const showJoinedTab = joinedTab ? <button  className="buttonShow" onClick={Joine
                       setIsDeleted={setIsDeletedJoinFiles}
                     />
 
-                    {/* <button onClick={()=>handleShow(element.fileName)}>see file</button>   <button>*/}
                   </>
                 );
               })}
             </table>
           </>
-        )}
-
+        )} 
+           
         {showFile && (
+             
           <table>
             <thead>
               <tr key={"header"}>
@@ -371,13 +330,13 @@ const showJoinedTab = joinedTab ? <button  className="buttonShow" onClick={Joine
         )}
         <br />
         <br />
-        <hr />
+     
         <br />
         <br />
         <br />
         <br />
 
-        <Button
+        {/* <Button
           className="Button"
           onClick={handleClick}
           style={{
@@ -519,8 +478,8 @@ const showJoinedTab = joinedTab ? <button  className="buttonShow" onClick={Joine
           >
             <AiFillCaretUp />
           </button>
-        </footer>
-      </div>
+        </footer> */}
+
     </>
   );
 };

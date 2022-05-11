@@ -40,12 +40,12 @@ export default function Logout() {
   return (
     <React.Fragment>
       <Divider />
-      <List>
+    <List>
         <ListItem button onClick={HandleLogout}>
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <Typography>Logout</Typography>
+          <Typography title="Log Out">Logout</Typography>
         </ListItem>
       </List>
     </React.Fragment>

@@ -30,7 +30,7 @@ function SignIn() {
         },
       });
       axios.defaults.headers.common["Authorization"] = `Bearer ${response.data}` ;
-      navigate("/Dashboard");
+      navigate("/csvUploader");
       const Toast = Swal.mixin({
         toast: true,
         position: "bottom-right",

@@ -3,27 +3,37 @@ import React from "react";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Container from "./accounts/container/Container";
-import DashboardHome from "./accounts/home/DashboardHome";
+import CsvUploader from "./accounts/home/CsvUploader";
 import WarningHome from "./accounts/warning/WarninhHome";
 import RecomHome from "./accounts/recommendation/RecomHome";
 import UsersHome from "./accounts/clientsmanagement/UsersHome";
-import UserFiles from "./accounts/uploadedFilesList/UserFiles";
+import UserSimpleFiles from "./accounts/uploadedFilesList/UserSimpleFiles";
 import CommentsHome from "./accounts/comments/CommentsHome";
-import SignIn from "./accounts/signin/SignIn"
+import  Dashboard from "./accounts/dahsboard/Dashboard";
+import  UserJoinedFiles from "./accounts/uploadedFilesList/UserJoinedFiles";
+import JoinProcess from "./accounts/uploadedFilesList/JoinProcess";
+import Profil from "./accounts/profil/Profil"
+
+
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route exact path="/Dashboard" element={<DashboardHome />}></Route>
+          <Route exact path="/CsvUploader" element={<CsvUploader/>}></Route>
           <Route exact path="/" element={<Container />}></Route>
           <Route exact path="/Warning" element={<WarningHome />}></Route>
           <Route exact path="/Recommendation" element={<RecomHome />}></Route>
           <Route exact path="/Users" element={<UsersHome />}></Route>
-          <Route exact path="/UploadedFilesList" element={<UserFiles/>}></Route>
+          <Route exact path="/UploadedSimpleFilesList" element={<UserSimpleFiles/>}></Route>
           <Route exact path="/Comments" element={<CommentsHome />}></Route>
-          <Route exact path="/SignIn" element={<SignIn />}></Route>
+          <Route exact path="/Dashboard" element={<Dashboard/>}></Route>
+          {/* <Route exact path="/UploadedJoinedFilesList" element={<UserJoinedFiles/>}></Route> */}
+          <Route exact path="/JoinedFilesList" element={<UserJoinedFiles/>}></Route>
+          <Route exact path="/JoinProcess" element={<JoinProcess/>}></Route>
+          <Route exact path="/YourProfil" element={<Profil/>}></Route>
+
         </Routes>
 
 

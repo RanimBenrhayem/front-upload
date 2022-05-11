@@ -55,14 +55,18 @@ function FileUploader() {
         console.log(file[0]);
 
       };
+      console.log(file[0]);
       fileReader.readAsText(file[0]);
+      
       setShow(true)
     }
 
   }
 
   //la fonction asynchrone handleUpload (en relation avec le back)
-  async function handleUpload() {
+  async function handleUpload(e)
+   {
+   e.preventDefault()
     try {
       if (file[0]) {
         const formData = new FormData();
@@ -70,7 +74,7 @@ function FileUploader() {
 
         const response = await uploadSingleFiles(formData); //uploadSingleFiles se trouve dans le fichier Axios
         if (response.success === true) {
-          setFile(response.data);
+          // setFile(response.data);
           fileReader.onload = function (event) {
             const text = event.target.result;
             csvFileToArray(text);
@@ -82,16 +86,19 @@ function FileUploader() {
             toast: true,
             position: "bottom-right",
             showConfirmButton: false,
-            timer: 2000,
+         
             timerProgressBar: true,
+            timer : 5000
           });
 
           Toast.fire({
             icon: "success",
-            title: response.data,
+            title:  `${response.data}, you can now check your files list`,
           });
+
         }
       }
+      console.log(file[0])
     } catch (error) {
       console.log(error);
     }
@@ -110,11 +117,13 @@ function FileUploader() {
   const headerKeys = Object.keys(Object.assign({}, ...array));
 
   return (
-    <div ref={lastItemRef}>
+
+    <div className="drop" >
+   
       <DropzoneArea
-        className='Drop'
+   
         useChipsForPreview
-        previewText="Selected files"
+        previewText= 'Your selected File'
         showPreviews={true}
         showPreviewsInDropzone={false}
         filesLimit={1}
@@ -136,7 +145,7 @@ function FileUploader() {
         </div>
       )}
 
-      {show && (
+      { file.length>0 && show && (
         <table>
           <thead>
             <tr key={"header"}>
@@ -158,15 +167,7 @@ function FileUploader() {
         </table>
       )}
 
-      <footer>
-        {" "}
-        <button
-          className="scrolltop"
-          onClick={() => lastItemRef.current.scrollIntoView()}
-        >
-          <AiFillCaretUp />
-        </button>
-      </footer>
+     
     </div>
   );
 }

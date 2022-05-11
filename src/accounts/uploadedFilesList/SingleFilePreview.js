@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { getSimpleFileById,deleteSignleFiles } from "../../services/axios";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
-import {UserFiles} from "../uploadedFilesList/FilesToUpload"
+import {UserFiles} from "./SimpleFilesToUpload"
 
 
 function SingleFilePreview ({id ,handleShow,isDeleted,setIsDeleted}) {

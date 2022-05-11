@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Typography from "@material-ui/core/Typography";
 
 import LayoutHome from "../layout/LayoutHome";
+import { Translate } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   typography1: {
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   iconarrow: {
     fontSize: "inherit",
     marginBottom: -6.25,
+    
+   
+    
   },
   title: {
     margin: theme.spacing(-14, 37),
@@ -43,7 +47,7 @@ export default function DashboardHome() {
 
     <div className={classes.contenu}>
             <SideBar />
-
+            <img  className="logoBranper" src="Logo.png"/>
       <Box>
         <LayoutHome />
         <Typography
@@ -52,14 +56,15 @@ export default function DashboardHome() {
           className={classes.typography1}
 
         >
-          Dashboard <ArrowRightIcon className={classes.iconarrow} />
-          File Uploader
+        <div className="description">   <ArrowRightIcon className={classes.iconarrow} />
+         File Uploader : <div>You can add your csv files in the box below .<br/>   Only csv files .. all other types will be rejected</div> </div> 
+                        
         </Typography>
       </Box>
       <div className={classes.dropezone}>
         <FileUploader />
       </div>
-      <Box>
+      {/* <Box>
         <Typography
           variant="subtitle1"
           component="h2"
@@ -68,7 +73,7 @@ export default function DashboardHome() {
           Dashboard <ArrowRightIcon className={classes.iconarrow} />
           Reports
         </Typography>
-      </Box>
+      </Box> */}
     </div>
   );
 }
